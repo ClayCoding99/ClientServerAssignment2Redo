@@ -104,11 +104,6 @@ public class HttpServletRequest {
 
          String currentFormData = separatedByBoundary[i];
 
-         // if for some weird parsing reason the form data is blank, then we leave
-         if (currentFormData.isBlank()) {
-            return;
-         }
-
          String head = currentFormData.split(HEAD_BODY_SEP)[0];
          String body = currentFormData.split(HEAD_BODY_SEP)[1];
 
@@ -138,12 +133,21 @@ public class HttpServletRequest {
             // map the filePath to the body
           
             // weird parsing had /r/n attached to the end. Also, the protocol hypens are in the end instead of the front for the last one, so this also gets rid of that problem
-            parameters.put(filePath, body.split("\r\n")[0]);
+
+            if (i == separatedByBoundary.length - 1) {
+               parameters.put(filePath, body.substring(0, body.length() - 2));
+            } else {
+               parameters.put(filePath, body);
+            }
          } else {
             // if we don't have a file, simply map the key and body
             
             // weird parsing had /r/n attached to the end. Also, the protocol hypens are in the end instead of the front for the last one, so this also gets rid of that problem
-            parameters.put(key, body.split("\r\n")[0]);
+            if (i == separatedByBoundary.length - 1) {
+               parameters.put(key, body.substring(0, body.length() - 2));
+            } else {
+               parameters.put(key, body);
+            }
          }
       }
    }
