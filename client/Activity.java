@@ -29,6 +29,8 @@ public class Activity {
    
             for (Menu m : menus) {
                m.show();
+               // StringBuilder builder = m.getHTTPRequestBuilder();
+               // builder.delete(0, builder.length());
             }
       
             userInput = scan.nextInt();
@@ -41,18 +43,18 @@ public class Activity {
             }
       
             if (menuToUse != null) {
+               menuToUse.buildRequest(menuToUse.getDataFromUser(scan));
+
                Socket socket = new Socket("localhost", UploadServer.PORT);
                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-   
-               PrintWriter writer = new PrintWriter(socket.getOutputStream());
+               OutputStream out = socket.getOutputStream();
 
-               menuToUse.buildRequest(menuToUse.getDataFromUser(scan), writer);
-               //socket.shutdownOutput();
+               menuToUse.executeRequest(out);
 
                System.out.println("done building response");
-
+               // BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                menuToUse.handleResponse(in);
-               // socket.shutdownInput();
+               socket.shutdownInput();
 
                socket.close();
             } else {

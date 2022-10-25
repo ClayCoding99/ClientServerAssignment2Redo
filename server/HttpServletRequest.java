@@ -205,6 +205,7 @@ public class HttpServletRequest {
    }
 
    public String getHeader(String key) {
+      System.out.println("--------------------------------------------------"+headers.get(key));
       return headers.get(key);
    }
 

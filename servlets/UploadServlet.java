@@ -60,7 +60,7 @@ public class UploadServlet extends HttpServlet {
     
       // get the file names in the image file as a json if invoked by CLI or html list if browser
       String listing = null;
-      if (request.getHeader("User-Agent").equals("CLI")) {
+      if (request.getHeader("User-Agent").equals(" CLI")) {
          response.setContentType("text/json");
          listing = getSortedListingJSON("./images/");
       } else {
@@ -100,12 +100,12 @@ public class UploadServlet extends HttpServlet {
       htmlBuilder.append("</head>\r\n");
       htmlBuilder.append("<body>\r\n");
 
-      htmlBuilder.append("<ol>\r\n");
+      htmlBuilder.append("<ul>\r\n");
       for (String s : sortedChld) {
          htmlBuilder.append("<li>").append(s).append("</li>").append("\r\n");
       }
 
-      htmlBuilder.append("</ol>\r\n");
+      htmlBuilder.append("</ul>\r\n");
       htmlBuilder.append("</body>\r\n");
       htmlBuilder.append("</html>\r\n");
 

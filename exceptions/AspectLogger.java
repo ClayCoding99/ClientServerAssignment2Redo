@@ -46,7 +46,6 @@ public class AspectLogger {
 
     // Sees all packages
     @Pointcut("within(*) && execution(* *(..))")
-
     public void matchAllMyMethods() {
     }
 
