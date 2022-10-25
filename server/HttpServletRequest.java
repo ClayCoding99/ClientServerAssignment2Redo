@@ -133,9 +133,8 @@ public class HttpServletRequest {
             // map the filePath to the body
           
             // weird parsing had /r/n attached to the end. Also, the protocol hypens are in the end instead of the front for the last one, so this also gets rid of that problem
-
             if (i == separatedByBoundary.length - 1) {
-               parameters.put(filePath, body.substring(0, body.length() - 2));
+               parameters.put(filePath, body.split("\r\n")[0].trim());
             } else {
                parameters.put(filePath, body);
             }
@@ -144,7 +143,7 @@ public class HttpServletRequest {
             
             // weird parsing had /r/n attached to the end. Also, the protocol hypens are in the end instead of the front for the last one, so this also gets rid of that problem
             if (i == separatedByBoundary.length - 1) {
-               parameters.put(key, body.substring(0, body.length() - 2));
+               parameters.put(key, body.split("\r\n")[0].trim());
             } else {
                parameters.put(key, body);
             }
@@ -205,7 +204,6 @@ public class HttpServletRequest {
    }
 
    public String getHeader(String key) {
-      System.out.println("--------------------------------------------------"+headers.get(key));
       return headers.get(key);
    }
 

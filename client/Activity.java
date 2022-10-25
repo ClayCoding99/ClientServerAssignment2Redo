@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import server.UploadServer;
-public class Activity {
 
-   private String dirName = null;
+public class Activity {
 
    public static void main(String[] args) throws IOException {
       new Activity().onCreate();
@@ -25,14 +24,14 @@ public class Activity {
          Scanner scan = new Scanner(System.in);
          int userInput = -1;
          do {
+
+            // show menu options
             System.out.println("Menus:");
-   
             for (Menu m : menus) {
                m.show();
-               // StringBuilder builder = m.getHTTPRequestBuilder();
-               // builder.delete(0, builder.length());
             }
       
+            // get the menu the user selected and use it
             userInput = scan.nextInt();
             Menu menuToUse = null;
             for (Menu m : menus) {
@@ -42,17 +41,19 @@ public class Activity {
                }
             }
       
+            // if we have a valid menu, do the stuff
             if (menuToUse != null) {
+               // build the request
                menuToUse.buildRequest(menuToUse.getDataFromUser(scan));
 
+               // set up the socket and send the request to the server
                Socket socket = new Socket("localhost", UploadServer.PORT);
                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                OutputStream out = socket.getOutputStream();
 
                menuToUse.executeRequest(out);
+               socket.shutdownOutput();
 
-               System.out.println("done building response");
-               // BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                menuToUse.handleResponse(in);
                socket.shutdownInput();
 

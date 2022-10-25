@@ -82,7 +82,7 @@ public class UploadServlet extends HttpServlet {
       for (int i = 0; i < sortedChld.size(); i++) {
          jsonString += i + ": " + sortedChld.get(i);
          if (i != sortedChld.size() - 1) {
-            jsonString += ",";
+            jsonString += " ,";
          }
       }
       jsonString += "}";
