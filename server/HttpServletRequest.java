@@ -23,9 +23,9 @@ public class HttpServletRequest {
 
    public HttpServletRequest(InputStream inputStream) {
       this.inputStream = inputStream;
+
       String wholeStream = inputStreamToString(inputStream);
-      //System.out.println("This is the whole stream: ");
-      System.out.println(wholeStream);
+
       try {
          // separate the head and body of the request
          String[] headAndBody = separateHeadAndBody(wholeStream);
@@ -174,9 +174,13 @@ public class HttpServletRequest {
    private String inputStreamToString(InputStream inputStream) {
       String wholeStream = "";
       try {
+         System.out.println("going to parse now");
          while (inputStream.available() != 0) {
-            wholeStream += (char)(inputStream.read() & 0xFF);
+            char c = (char)(inputStream.read() & 0xFF);
+            System.out.print(c);
+            wholeStream += c;
          }
+         System.out.println("have finished parsing");
       } catch (IOException e) {
          System.out.println("Failed to convert input stream to a string!");
          e.printStackTrace();

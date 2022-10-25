@@ -1,0 +1,7 @@
+<!-- aop.xml -->
+<aspectj>
+    <aspects>
+        <!-- <aspect name="com.example.aspects.BasicAspect"/> -->
+        <aspect name="exceptions.AspectLogger"></aspect>
+    </aspects>
+</aspectj>

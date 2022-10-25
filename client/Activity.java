@@ -18,8 +18,6 @@ public class Activity {
    public Activity() { }
 
    public void onCreate() {
-      // System.out.println(new UploadClient().uploadFile());
-
       try {
          List<Menu> menus = new ArrayList<>();
          menus.add(new FileUploadMenu());
@@ -27,7 +25,7 @@ public class Activity {
          Scanner scan = new Scanner(System.in);
          int userInput = -1;
          do {
-            System.out.println("Main menu:");
+            System.out.println("Menus:");
    
             for (Menu m : menus) {
                m.show();
@@ -43,17 +41,18 @@ public class Activity {
             }
       
             if (menuToUse != null) {
-               menuToUse.buildRequest(menuToUse.getDataFromUser(scan));
-
                Socket socket = new Socket("localhost", UploadServer.PORT);
                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-               OutputStream out = socket.getOutputStream();
+   
+               PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-               menuToUse.executeRequest(out);
-               socket.shutdownOutput();
+               menuToUse.buildRequest(menuToUse.getDataFromUser(scan), writer);
+               //socket.shutdownOutput();
+
+               System.out.println("done building response");
 
                menuToUse.handleResponse(in);
-               socket.shutdownInput();
+               // socket.shutdownInput();
 
                socket.close();
             } else {

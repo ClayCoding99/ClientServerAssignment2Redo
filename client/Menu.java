@@ -2,6 +2,7 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -23,8 +24,7 @@ public abstract class Menu {
 
     public abstract void show();
     public abstract Map<String, String> getDataFromUser(Scanner scan);
-    public abstract void buildRequest(Map<String, String> dataFromUser);
-    public abstract void executeRequest(OutputStream out);
+    public abstract void buildRequest(Map<String, String> dataFromUser, PrintWriter writer);
     public abstract void handleResponse(BufferedReader in);
 
     protected int getStartKey() {

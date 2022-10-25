@@ -2,6 +2,8 @@ package server;
 
 import java.net.*;
 
+import exceptions.ServerException;
+
 import java.io.*;
 
 public class Router extends Thread {

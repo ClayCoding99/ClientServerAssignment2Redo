@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -42,38 +43,27 @@ public class FileUploadMenu extends Menu {
     }
 
     @Override
-    public void buildRequest(Map<String, String> dataFromUser) {
+    public void buildRequest(Map<String, String> dataFromUser, PrintWriter writer) {
         String filePath = dataFromUser.get("filePath");
         String caption = dataFromUser.get("caption");
         String date = dataFromUser.get("date");
 
-        // build the body before hand so we can get the content length
-        StringBuilder bodyBuilder = new StringBuilder();
-        buildBody(bodyBuilder, filePath, caption, date);
-
-        StringBuilder reqBuilder = getHTTPRequestBuilder();
-
         // request line
-        reqBuilder.append("POST ").append("/ ").append(VERSION).append("\r\n");
+        writer.append("POST ").append("/ ").append(VERSION).append("\r\n").flush();
 
         // headers
-        reqBuilder.append("User-Agent: ").append("CLI").append("\r\n");
-        reqBuilder.append("Accept: ").append("*/*").append("\r\n");
-        reqBuilder.append("Host: ").append(HOST).append("\r\n");
-        reqBuilder.append("Accept-Encoding: gzip, deflate, br").append("\r\n");
-        reqBuilder.append("Connection: ").append("keep-alive").append("\r\n");
-        reqBuilder.append("Content-Type: ").append("multipart/form-data; boundary=").append(BOUNDARY).append("\r\n");
-        reqBuilder.append("Content-Length: ").append(bodyBuilder.toString().length()).append("\r\n");
+        writer.append("User-Agent: ").append("CLI").append("\r\n").flush();
+        writer.append("Accept: ").append("*/*").append("\r\n").flush();
+        writer.append("Host: ").append(HOST).append("\r\n").flush();
+        writer.append("Accept-Encoding: gzip, deflate, br").append("\r\n").flush();
+        writer.append("Connection: ").append("keep-alive").append("\r\n").flush();
+        writer.append("Content-Type: ").append("multipart/form-data; boundary=").append(BOUNDARY).append("\r\n").flush();
 
         // split body from head
-        reqBuilder.append("\r\n");
+        writer.append("\r\n").flush();
         
         // parameters
-        reqBuilder.append(bodyBuilder);
-    }
-
-    private void buildBody(StringBuilder bodyBuilder, String filePath, String caption, String date) {
-        bodyBuilder.append("--").append(BOUNDARY).append("\r\n");
+        writer.append("--").append(BOUNDARY).append("\r\n").flush();
 
         File f = new File(filePath);
         String fileName = f.getName();
@@ -84,43 +74,32 @@ public class FileUploadMenu extends Menu {
                 fileAsString += (char)(fis.read() & 0xFF);
             }
 
-            bodyBuilder.append("Content-Disposition: form-data; name=\"fileName\"; filename=\"").append(fileName).append("\"\r\n");
+            writer.append("Content-Disposition: form-data; name=\"fileName\"; filename=\"").append(fileName).append("\"\r\n").flush();
 
             //String fileType = fileName.split(".")[1];
-            bodyBuilder.append("Content-Type: ").append("image/png").append("\r\n\r\n");
-            bodyBuilder.append(fileAsString).append("\r\n");
+            writer.append("Content-Type: ").append("image/png").append("\r\n\r\n").flush();
+            writer.append(fileAsString).append("\r\n").flush();
     
-            bodyBuilder.append("--").append(BOUNDARY).append("\r\n");
+            writer.append("--").append(BOUNDARY).append("\r\n").flush();
 
             fis.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        bodyBuilder.append("Content-Disposition: form-data; name=\"caption\"").append("\r\n");
-        bodyBuilder.append("\r\n");
-        bodyBuilder.append(caption).append("\r\n");
-        bodyBuilder.append("--").append(BOUNDARY).append("\r\n");
+        writer.append("Content-Disposition: form-data; name=\"caption\"").append("\r\n").flush();
+        writer.append("\r\n").flush();
+        writer.append(caption).append("\r\n").flush();
+        writer.append("--").append(BOUNDARY).append("\r\n").flush();
 
-        bodyBuilder.append("Content-Disposition: form-data; name=\"date\"").append("\r\n");
-        bodyBuilder.append("\r\n");
-        bodyBuilder.append(date).append("\r\n");
-        bodyBuilder.append("--").append(BOUNDARY).append("--\r\n");
-    }
+        writer.append("Content-Disposition: form-data; name=\"date\"").append("\r\n").flush();
+        writer.append("\r\n").flush();
+        writer.append(date).append("\r\n").flush();
+        writer.append("--").append(BOUNDARY).append("--\r\n").flush();
+        
+        writer.close();
 
-    @Override
-    public void executeRequest(OutputStream out) {
-        try {
-            String requestString = getHTTPRequestBuilder().toString();
-            byte[] requestBytes = new byte[requestString.length()];
-            for (int i = 0; i < requestString.length(); i++) {
-                requestBytes[i] = (byte) requestString.charAt(i);
-            }
-            //System.out.println(requestBytes);
-            out.write(requestBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("almost done building response");
     }
 
     @Override

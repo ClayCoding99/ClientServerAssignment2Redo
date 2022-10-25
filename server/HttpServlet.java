@@ -2,6 +2,8 @@ package server;
 
 import java.io.IOException;
 
+import exceptions.ServerException;
+
 public abstract class HttpServlet {
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServerException, IOException { 

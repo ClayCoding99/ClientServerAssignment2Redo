@@ -3,12 +3,13 @@ package servlets;
 import server.HttpServlet;
 import server.HttpServletRequest;
 import server.HttpServletResponse;
-import server.ServerException;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import exceptions.ServerException;
 
 public class UploadServlet extends HttpServlet {
 
