@@ -5,7 +5,7 @@ import java.io.*;
 
 public class UploadServer {
 
-    public static final int PORT = 8000;
+    public static final int PORT = 8081;
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = null;

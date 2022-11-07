@@ -78,9 +78,15 @@ public class FileUploadMenu extends Menu {
         System.out.println("File names returned from the server: ");
         try {
             // move until we reach the body of the response
-            while (in.readLine() != "\r\n\r\n" && !in.readLine().isEmpty());
-            // read the body of the response
+            String line = "";
+            while ((line = in.readLine()) != null) {
+                if (line.isBlank()) {
+                    break;
+                }
+            }
+
             while ((fileName = in.readLine()) != null) {
+                if (fileName.contains(""))
                 System.out.println(fileName);
             }
         } catch (IOException e) {

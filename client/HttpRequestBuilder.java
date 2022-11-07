@@ -10,6 +10,9 @@ public class HttpRequestBuilder {
     public static final String VERSION = "HTTP/1.1";
     public static final String HOST = "localhost:" + UploadServer.PORT;
     public static final String BOUNDARY = "12345abcde";
+    public static final String URL = "/COMP3940_Assignment1/upload?";
+
+    public static final int GUEST_USER_ID = 1000;
 
     private HttpRequestBuilder() {}
 
@@ -21,7 +24,7 @@ public class HttpRequestBuilder {
         StringBuilder reqBuilder = new StringBuilder();
 
         // request line
-        reqBuilder.append("POST ").append("/ ").append(VERSION).append("\r\n");
+        reqBuilder.append("POST ").append(URL).append(" ").append(VERSION).append("\r\n");
 
         // headers
         reqBuilder.append("User-Agent: ").append("CLI").append("\r\n");
@@ -51,6 +54,12 @@ public class HttpRequestBuilder {
         bodyBuilder.append("Content-Disposition: form-data; name=\"caption\"").append("\r\n");
         bodyBuilder.append("\r\n");
         bodyBuilder.append(caption).append("\r\n");
+        bodyBuilder.append("--").append(BOUNDARY).append("\r\n");
+
+        // parse the user id for the guest
+        bodyBuilder.append("Content-Disposition: form-data; name=\"USER_ID\"").append("\r\n");
+        bodyBuilder.append("\r\n");
+        bodyBuilder.append(GUEST_USER_ID).append("\r\n");
         bodyBuilder.append("--").append(BOUNDARY).append("\r\n");
 
         // parse the date

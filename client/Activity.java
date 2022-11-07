@@ -47,15 +47,17 @@ public class Activity {
                menuToUse.buildRequest(menuToUse.getDataFromUser(scan));
 
                // set up the socket and send the request to the server
+
+               // Assignment 2 port : UploadServer.PORT
                Socket socket = new Socket("localhost", UploadServer.PORT);
                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                OutputStream out = socket.getOutputStream();
 
                menuToUse.executeRequest(out);
-               socket.shutdownOutput();
+               //socket.shutdownOutput();
 
                menuToUse.handleResponse(in);
-               socket.shutdownInput();
+               //socket.shutdownInput();
 
                socket.close();
             } else {
